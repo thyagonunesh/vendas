@@ -33,10 +33,10 @@ public class VendasApplication {
 			System.out.println("Buscando Clientes");
 			repository.buscarPorNome("Cli").forEach(System.out::println);
 
-//			System.out.println("Deletando Clientes");
-//			repository.obterTodos().forEach(cliente -> {
-//				repository.deletar(cliente.getId());
-//			});
+			System.out.println("Deletando Clientes");
+			repository.obterTodos().forEach(cliente -> {
+				repository.deletar(cliente.getId());
+			});
 
 			todosClientes = repository.obterTodos();
 			if (todosClientes.isEmpty()) {
