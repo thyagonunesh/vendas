@@ -5,11 +5,9 @@ import lombok.*;
 
 import java.util.Set;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 @Entity
 @Table(name = "cliente")
 public class Cliente {
@@ -26,6 +24,7 @@ public class Cliente {
     @Column(name = "nome", length = 100)
     private String nome;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "cliente")
     private Set<Pedido> pedidos;
 
