@@ -1,17 +1,18 @@
-package com.estudos.vendas.domain;
+package com.estudos.vendas.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Getter
-@Setter
-@ToString
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "pedido")
 public class Pedido {
@@ -31,7 +32,6 @@ public class Pedido {
     @Column(name = "total", precision = 20, scale = 2)
     private BigDecimal total;
 
-    @ToString.Exclude
     @OneToMany(mappedBy = "pedido")
     private List<ItemPedido> itens;
 
