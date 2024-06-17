@@ -45,7 +45,7 @@ public class PedidoServiceImpl implements PedidoServico {
 
         Cliente cliente = clienteRepository
                             .findById(pedidoDTO.getCliente())
-                            .orElseThrow(() -> new RegraNegocioException("Código de cliente " + pedidoDTO.getCliente() + "inválido"));
+                            .orElseThrow(() -> new RegraNegocioException("Código de cliente " + pedidoDTO.getCliente() + " inválido"));
 
         Pedido pedido = new Pedido();
         pedido.setCliente(cliente);
@@ -81,16 +81,20 @@ public class PedidoServiceImpl implements PedidoServico {
 
                     Produto produto = produtoRepository
                             .findById(itemDTO.getProduto())
-                            .orElseThrow(() ->  new RegraNegocioException("Código de produto " + itemDTO.getProduto() +  "inválido!"));
+                            .orElseThrow(() ->  new RegraNegocioException("Código de produto " + itemDTO.getProduto() +  " inválido!"));
                     itemPedido.setProduto(produto);
 
-                    BigDecimal subtotalItem = produto.getPreco().multiply(BigDecimal.valueOf(itemPedido.getQuantidade()));
-
-                    pedido.setTotal(Objects.isNull(pedido.getTotal())
-                                        ? BigDecimal.valueOf(0).add(subtotalItem)
-                                        : pedido.getTotal().add(subtotalItem));
+                    calculaTotalPedido(pedido, produto, itemPedido);
 
                     return itemPedido;
                 }).collect(Collectors.toList());
+    }
+
+    private static void calculaTotalPedido(Pedido pedido, Produto produto, ItemPedido itemPedido) {
+        BigDecimal subtotalItem = produto.getPreco().multiply(BigDecimal.valueOf(itemPedido.getQuantidade()));
+
+        pedido.setTotal(Objects.isNull(pedido.getTotal())
+                            ? BigDecimal.valueOf(0).add(subtotalItem)
+                            : pedido.getTotal().add(subtotalItem));
     }
 }
