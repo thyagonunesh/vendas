@@ -1,7 +1,9 @@
 package com.estudos.vendas.service.impl;
 
 import com.estudos.vendas.dto.ItemPedidoDTO;
+import com.estudos.vendas.dto.ItemPedidoRetornoDTO;
 import com.estudos.vendas.dto.PedidoDTO;
+import com.estudos.vendas.dto.PedidoRetornoDTO;
 import com.estudos.vendas.entity.Cliente;
 import com.estudos.vendas.entity.ItemPedido;
 import com.estudos.vendas.entity.Pedido;
@@ -13,15 +15,16 @@ import com.estudos.vendas.repository.PedidoRepository;
 import com.estudos.vendas.repository.ProdutoRepository;
 import com.estudos.vendas.service.PedidoServico;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -60,10 +63,8 @@ public class PedidoServiceImpl implements PedidoServico {
     }
 
     @Override
-    public Pedido getPedidoById(Integer id) {
-        return pedidoRepository
-                .findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pedido não encontrado"));
+    public Optional<Pedido> obterPedidoCompleto(Integer id) {
+        return pedidoRepository.findByIdFetchItens(id);
     }
 
     private List<ItemPedido> converterItens(Pedido pedido, List<ItemPedidoDTO> itensDTO) {
@@ -97,4 +98,37 @@ public class PedidoServiceImpl implements PedidoServico {
                             ? BigDecimal.valueOf(0).add(subtotalItem)
                             : pedido.getTotal().add(subtotalItem));
     }
+
+    public static PedidoRetornoDTO converterPedido(Pedido pedido) {
+
+        return PedidoRetornoDTO
+                .builder()
+                .cpf(pedido.getCliente().getCpf())
+                .total(pedido.getTotal())
+                .codigo(pedido.getId())
+                .itens(converterItens(pedido.getItens()))
+                .nomeCliente(pedido.getCliente().getNome())
+                .dataPedido(pedido.getDataPedido().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")))
+                .build();
+
+    }
+
+    public static List<ItemPedidoRetornoDTO> converterItens(List<ItemPedido> itens) {
+        List<ItemPedidoRetornoDTO> itensRetornoDTO = new ArrayList<>();
+
+        itens.forEach(itemPedido -> {
+            ItemPedidoRetornoDTO itemPedidoRetornoDTO = ItemPedidoRetornoDTO
+                    .builder()
+                    .descricao(itemPedido.getProduto().getDescricao())
+                    .precoUnitario(itemPedido.getProduto().getPreco())
+                    .quantidade(itemPedido.getQuantidade())
+                    .build();
+
+            itensRetornoDTO.add(itemPedidoRetornoDTO);
+        });
+
+        return itensRetornoDTO;
+
+    }
+
 }
