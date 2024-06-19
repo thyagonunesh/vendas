@@ -1,8 +1,7 @@
-package com.estudos.vendas.dto;
+package com.estudos.vendas.dto.entrada;
 
 import lombok.Data;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Data

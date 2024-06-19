@@ -1,4 +1,4 @@
-package com.estudos.vendas.dto;
+package com.estudos.vendas.dto.entrada;
 
 import lombok.Data;
 

@@ -1,6 +1,7 @@
 create table cliente (
     id integer primary key auto_increment,
-    nome varchar (100)
+    nome varchar (100),
+    cpf varchar (11)
 );
 
 create table produto (
@@ -13,7 +14,8 @@ create table pedido (
     id integer primary key auto_increment,
     cliente_id integer references cliente(id),
     data_pedido timestamp,
-    total numeric(20,2)
+    total numeric(20,2),
+    status varchar(20)
 );
 
 create table item_pedido (

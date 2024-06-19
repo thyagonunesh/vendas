@@ -1,13 +1,16 @@
 package com.estudos.vendas.service.impl;
 
-import com.estudos.vendas.dto.ItemPedidoDTO;
-import com.estudos.vendas.dto.ItemPedidoRetornoDTO;
-import com.estudos.vendas.dto.PedidoDTO;
-import com.estudos.vendas.dto.PedidoRetornoDTO;
+import com.estudos.vendas.dto.entrada.AtualizaStatusPedidoDTO;
+import com.estudos.vendas.dto.entrada.ItemPedidoDTO;
+import com.estudos.vendas.dto.saida.ItemPedidoRetornoDTO;
+import com.estudos.vendas.dto.entrada.PedidoDTO;
+import com.estudos.vendas.dto.saida.PedidoRetornoDTO;
 import com.estudos.vendas.entity.Cliente;
 import com.estudos.vendas.entity.ItemPedido;
 import com.estudos.vendas.entity.Pedido;
 import com.estudos.vendas.entity.Produto;
+import com.estudos.vendas.enums.StatusPedido;
+import com.estudos.vendas.exception.PedidoNaoEncontradoException;
 import com.estudos.vendas.exception.RegraNegocioException;
 import com.estudos.vendas.repository.ClienteRepository;
 import com.estudos.vendas.repository.ItemPedidoRepository;
@@ -53,6 +56,7 @@ public class PedidoServiceImpl implements PedidoServico {
         Pedido pedido = new Pedido();
         pedido.setCliente(cliente);
         pedido.setDataPedido(LocalDateTime.now());
+        pedido.setStatus(StatusPedido.REALIZADO);
 
         List<ItemPedido> itemPedidos = converterItens(pedido, pedidoDTO.getItens());
         pedidoRepository.save(pedido);
@@ -65,6 +69,19 @@ public class PedidoServiceImpl implements PedidoServico {
     @Override
     public Optional<Pedido> obterPedidoCompleto(Integer id) {
         return pedidoRepository.findByIdFetchItens(id);
+    }
+
+    @Override
+    @Transactional
+    public void atualizaStatus(Integer id, StatusPedido statusPedido) {
+
+        pedidoRepository
+                .findById(id)
+                .map(pedido -> {
+                    pedido.setStatus(statusPedido);
+                    return pedido;
+                })
+                .orElseThrow(PedidoNaoEncontradoException::new);
     }
 
     private List<ItemPedido> converterItens(Pedido pedido, List<ItemPedidoDTO> itensDTO) {
@@ -109,6 +126,7 @@ public class PedidoServiceImpl implements PedidoServico {
                 .itens(converterItens(pedido.getItens()))
                 .nomeCliente(pedido.getCliente().getNome())
                 .dataPedido(pedido.getDataPedido().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")))
+                .status(pedido.getStatus().name())
                 .build();
 
     }

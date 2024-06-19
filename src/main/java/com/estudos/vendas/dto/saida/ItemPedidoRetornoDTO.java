@@ -1,4 +1,4 @@
-package com.estudos.vendas.dto;
+package com.estudos.vendas.dto.saida;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

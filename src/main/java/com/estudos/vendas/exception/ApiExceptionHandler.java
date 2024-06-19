@@ -20,4 +20,14 @@ public class ApiExceptionHandler {
                 .build();
     }
 
+    @ExceptionHandler(PedidoNaoEncontradoException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ApiErroModel handleRegraNegocioException(PedidoNaoEncontradoException exception) {
+        return ApiErroModel.builder()
+                .horario(LocalDateTime.now())
+                .mensagem(exception.getMessage())
+                .status(HttpStatus.NOT_FOUND)
+                .build();
+    }
+
 }
