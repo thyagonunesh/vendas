@@ -2,6 +2,7 @@ package com.estudos.vendas.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,16 +16,13 @@ import java.util.Set;
 @Table(name = "cliente")
 public class Cliente {
 
-    public Cliente(String nome) {
-        this.nome = nome;
-    }
-
-    @Id
+     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Integer id;
 
     @Column(name = "nome", length = 100)
+    @NotEmpty(message = "Necessário informar o nome do cliente")
     private String nome;
 
     @Column(name = "cpf", length = 11)

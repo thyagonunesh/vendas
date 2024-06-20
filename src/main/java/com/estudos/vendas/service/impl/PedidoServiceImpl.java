@@ -1,9 +1,8 @@
 package com.estudos.vendas.service.impl;
 
-import com.estudos.vendas.dto.entrada.AtualizaStatusPedidoDTO;
 import com.estudos.vendas.dto.entrada.ItemPedidoDTO;
-import com.estudos.vendas.dto.saida.ItemPedidoRetornoDTO;
 import com.estudos.vendas.dto.entrada.PedidoDTO;
+import com.estudos.vendas.dto.saida.ItemPedidoRetornoDTO;
 import com.estudos.vendas.dto.saida.PedidoRetornoDTO;
 import com.estudos.vendas.entity.Cliente;
 import com.estudos.vendas.entity.ItemPedido;

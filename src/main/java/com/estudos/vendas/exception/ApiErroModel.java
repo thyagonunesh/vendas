@@ -1,20 +1,20 @@
 package com.estudos.vendas.exception;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import org.springframework.http.HttpStatus;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Builder
+@AllArgsConstructor
 public class ApiErroModel {
 
-    private String mensagem;
+    private List<String> erros;
 
-    private HttpStatus status;
-
-    private LocalDateTime horario;
+    public ApiErroModel(String mensagem) {
+        this.erros.add(mensagem);
+    }
 
 }
