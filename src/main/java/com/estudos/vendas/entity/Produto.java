@@ -1,6 +1,8 @@
 package com.estudos.vendas.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,9 +22,11 @@ public class Produto {
     private Integer id;
 
     @Column(name = "descricao")
+    @NotEmpty(message = "Necessário informar a descrição do produto")
     private String descricao;
 
     @Column(name = "preco_unitario")
+    @NotNull(message = "Necessário informar o preço do produto")
     private BigDecimal preco;
 
 }

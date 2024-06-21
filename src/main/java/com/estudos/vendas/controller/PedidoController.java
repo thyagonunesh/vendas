@@ -7,6 +7,7 @@ import com.estudos.vendas.entity.Pedido;
 import com.estudos.vendas.enums.StatusPedido;
 import com.estudos.vendas.service.PedidoServico;
 import com.estudos.vendas.service.impl.PedidoServiceImpl;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class PedidoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Integer save(@RequestBody PedidoDTO pedidoDTO) {
+    public Integer save(@RequestBody @Valid PedidoDTO pedidoDTO) {
         Pedido pedido = pedidoServico.save(pedidoDTO);
         return pedido.getId();
     }
